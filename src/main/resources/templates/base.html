@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" th:fragment="parent(content,title,script)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:replace="${title}"></title>
+    <link data-th-href="@{'css/output.css'}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+<!--    Foont awesome CDN-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="dark:bg-gray-900 bg-gray-100 dark:text-white">
+
+<!--Common header-->
+<div data-th-replace="~{navbar::navbar}">
+</div>
+
+<!--Main Content-->
+<div class="top-10">
+    <section data-th-replace="${content}"></section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<script data-th-src="@{'/js/script.js'}"></script>
+<th:block th:replace="${script}" ></th:block>
+
+<!--Common footer-->
+</body>
+</html>
