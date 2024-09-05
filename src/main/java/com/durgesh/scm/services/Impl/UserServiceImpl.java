@@ -1,11 +1,14 @@
 package com.durgesh.scm.services.Impl;
 
 import com.durgesh.scm.entities.User;
+import com.durgesh.scm.helpers.AppConstants;
 import com.durgesh.scm.helpers.ResourceNotFoundException;
 import com.durgesh.scm.repositories.UserRepo;
 import com.durgesh.scm.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
@@ -25,6 +31,13 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
+        //password Encode
+        //user.setPassword(userId)
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        //Set the user role
+        user.setRoleList(List.of(AppConstants.ROLE_USER));
+
         return userRepo.save(user);
     }
 

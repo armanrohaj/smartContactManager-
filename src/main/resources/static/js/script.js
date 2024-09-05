@@ -53,3 +53,4 @@ function changePageTheme(theme,oldTheme){
     //Change the text of button
    document.querySelector("#theme_change_button").querySelector("span").textContent = theme ==="light" ? "dark" : "light";
 }
+
