@@ -11,12 +11,15 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
 
@@ -60,7 +63,37 @@ public class SecurityConfig {
         });
         //custom form login
         //Agar hume kuch bhi change krna hua form login se related to yha aaenge
-        httpSecurity.formLogin(Customizer.withDefaults());
+        httpSecurity.formLogin((formLogin)->{
+            formLogin.loginPage("/login");
+            formLogin.loginProcessingUrl("/authenticate");
+            formLogin.successForwardUrl("/user/dashboard");
+
+//            formLogin.failureForwardUrl("/login?error=true");
+//            formLogin.defaultSuccessUrl("/home");
+            formLogin.usernameParameter("email");
+            formLogin.passwordParameter("password");
+//            formLogin.failureHandler( new AuthenticationFailureHandler() {
+//
+//                @Override
+//                public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+//
+//                }
+//            });
+//
+//            formLogin.successHandler(new AuthenticationSuccessHandler() {
+//
+//                @Override
+//                public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//
+//                }
+//            });
+        });
+
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.logout(formLogout ->{
+                formLogout.logoutUrl("/logout");
+                formLogout.logoutSuccessUrl("/login?logout=true");
+        });
 
         return httpSecurity.build();
     }
